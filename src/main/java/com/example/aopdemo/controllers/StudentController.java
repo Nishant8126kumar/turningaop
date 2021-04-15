@@ -14,10 +14,9 @@ public class StudentController {
     @Autowired
     StudentService studentService;
 
-    //    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @GetMapping(value = "/create")
-    public ResponseEntity<?> createStudent() {
-        Student student = new Student();
+    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createStudent(@RequestBody Student student) {
+        System.out.printf("Request object is =:"+student);
         return ResponseEntity.ok(studentService.createStudent(student));
     }
 

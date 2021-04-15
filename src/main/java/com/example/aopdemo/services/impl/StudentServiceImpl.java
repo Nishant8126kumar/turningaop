@@ -3,6 +3,7 @@ package com.example.aopdemo.services.impl;
 import com.example.aopdemo.exceptions.NotAllowedException;
 import com.example.aopdemo.models.Student;
 import com.example.aopdemo.services.StudentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
