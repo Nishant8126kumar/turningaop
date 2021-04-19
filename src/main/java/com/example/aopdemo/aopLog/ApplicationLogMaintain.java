@@ -15,11 +15,11 @@ public class ApplicationLogMaintain {
 
     final static Logger LOGGER = LoggerFactory.getLogger(AopdemoApplication.class);
 
-    @Pointcut(value = "execution(* com.example.aopdemo.controllers.StudentController.*(..))")
+    @Pointcut(value = "execution(* com.example.aopdemo.controllers.VehicleController.*(..))")
     public void studentcontrollerPointcut() {
     }
 
-    @Pointcut(value = "execution(* com.example.aopdemo.services.StudentService.*(..))")
+    @Pointcut(value = "execution(* com.example.aopdemo.services.VehicleService.*(..))")
     public void studentServicePointcut() {
     }
 

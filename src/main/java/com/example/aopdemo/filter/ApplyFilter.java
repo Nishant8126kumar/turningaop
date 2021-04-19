@@ -3,7 +3,6 @@ package com.example.aopdemo.filter;
 import com.example.aopdemo.exceptions.NotAllowedException;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -23,10 +22,10 @@ public class ApplyFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader("Authorization");
-        System.out.println("token=:" + token);
-        if (token != null) {
-            throw new NotAllowedException("User not Authenticate");
-        }
+//        if (token == null) {
+//            throw new NotAllowedException("User not Authenticate");
+//        }
+
         filterChain.doFilter(request, response);
     }
 
@@ -46,5 +45,6 @@ public class ApplyFilter extends OncePerRequestFilter {
                 .setClaims(claims);
 //                .signWith(SignatureAlgorithm.ES512, key);
         System.out.println(jwtBuilder.compact());
+//        System.out.println(OffsetDateTime.now().plusHours(5));
     }
 }
