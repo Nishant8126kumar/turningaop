@@ -3,7 +3,6 @@ package com.example.aopdemo.models;
 import java.util.ArrayList;
 
 public class Vehicle {
-
     String vehicleId;
     String vehicleRnNumber;
     String chassisNo;
@@ -12,13 +11,14 @@ public class Vehicle {
     String dlExpDate;
     String vehicleOwnerName;
     String vtsDeviceId;
+    String status;
     ArrayList<CustomFields> customFields;
     private long timeStamp;
 
     public Vehicle() {
     }
 
-    public Vehicle(String vehicleId, String vehicleRnNumber, String chassisNo, String driverId, String dlNumber, String dlExpDate, String vehicleOwnerName, String vtsDeviceId, ArrayList<CustomFields> customFields, long timeStamp) {
+    public Vehicle(String vehicleId, String vehicleRnNumber, String chassisNo, String driverId, String dlNumber, String dlExpDate, String vehicleOwnerName, String vtsDeviceId, String status, ArrayList<CustomFields> customFields, long timeStamp) {
         this.vehicleId = vehicleId;
         this.vehicleRnNumber = vehicleRnNumber;
         this.chassisNo = chassisNo;
@@ -27,8 +27,17 @@ public class Vehicle {
         this.dlExpDate = dlExpDate;
         this.vehicleOwnerName = vehicleOwnerName;
         this.vtsDeviceId = vtsDeviceId;
+        this.status = status;
         this.customFields = customFields;
         this.timeStamp = timeStamp;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public long getTimeStamp() {
@@ -122,8 +131,9 @@ public class Vehicle {
                 ", dlExpDate='" + dlExpDate + '\'' +
                 ", vehicleOwnerName='" + vehicleOwnerName + '\'' +
                 ", vtsDeviceId='" + vtsDeviceId + '\'' +
+                ", status='" + status + '\'' +
                 ", customFields=" + customFields +
-                ", timeStamp='" + timeStamp + '\'' +
+                ", timeStamp=" + timeStamp +
                 '}';
     }
 }

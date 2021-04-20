@@ -2,6 +2,7 @@ package com.example.aopdemo.controllers;
 
 import com.example.aopdemo.models.Vehicle;
 import com.example.aopdemo.services.VehicleService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,12 @@ public class VehicleController {
 
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createStudent(@RequestBody Vehicle vehicle) {
+    public ResponseEntity<?> createStudent(@RequestBody String vehicle) throws JsonProcessingException {
         return ResponseEntity.ok(studentService.createStudent(vehicle));
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateStudent(@RequestBody Vehicle vehicle) {
+    public ResponseEntity<?> updateStudent(@RequestBody String vehicle) throws JsonProcessingException {
         return ResponseEntity.ok(studentService.updateStudent(vehicle));
     }
 
