@@ -15,4 +15,7 @@ public interface VehicleService {
     Map<String, Object> getStudentByID(String vehicleId);
 
     Map<String, Object> deleteStudentById(String vehicleId) throws JsonProcessingException;
+
+    Map<String, Object> getFields(String key, String value, String fields);
+
 }

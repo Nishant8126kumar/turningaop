@@ -1,6 +1,8 @@
 package com.example.aopdemo.repositories;
 
 import com.example.aopdemo.exceptions.DBException;
+import com.example.aopdemo.exceptions.MongoDbException;
+import com.example.aopdemo.exceptions.ResourceNotFoundException;
 import com.example.aopdemo.models.Vehicle;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,12 +13,14 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Repository
 public class VehicleRepository {
@@ -102,10 +106,25 @@ public class VehicleRepository {
         }
         return null;
     }
-//    ORDER BY CREATEDTIME DESC
-//    public static void main(String[] args) {
-//        String str="hl1code";
-//        String result = str.replaceAll("()([A-Z])", "$1_$2").toUpperCase();
-//        System.out.println(result);
-//    }
+
+    public JSONObject getVehicleByProjection(String key, String value, List<String> projectionFiels) {
+        try {
+            BasicDBObject requiredFiels = new BasicDBObject();
+            for (String projection : projectionFiels) {
+                requiredFiels.put(projection, 1);
+            }
+            MongoCursor cursor = mongoCollection.find(Filters.eq(key, value)).projection(requiredFiels).limit(1).iterator();
+            if (cursor.hasNext()) {
+                Document doc = (Document) cursor.next();
+                System.out.println(doc);
+                doc.remove("_id");
+                doc.remove("timeStamp");
+                String jsonString = doc.toJson();
+                return new JSONObject(jsonString);
+            }
+        } catch (JSONException e) {
+            throw new MongoDbException("Exception occured while fetch data on " + key + ":" + value + "");
+        }
+        throw new ResourceNotFoundException("");
+    }
 }

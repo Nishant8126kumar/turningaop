@@ -29,6 +29,11 @@ public class VehicleController {
         return ResponseEntity.ok(studentService.getStudentByID(studentId));
     }
 
+    @GetMapping(value = "/get/fields", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getFields(@RequestParam("key") String key, @RequestParam("value") String value, @RequestParam("fields") String fields) {
+        return ResponseEntity.ok(studentService.getFields(key, value, fields));
+    }
+
     @DeleteMapping(value = "/delete/{vehicleId}")
     public ResponseEntity<?> deleteStudentById(@PathVariable("vehicleId") String vehicleId) throws JsonProcessingException {
         return ResponseEntity.ok(studentService.deleteStudentById(vehicleId));

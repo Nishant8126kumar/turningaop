@@ -1,7 +1,6 @@
 package com.example.aopdemo.services.impl;
 
 import com.example.aopdemo.ApplicationConstant;
-import com.example.aopdemo.exceptions.DBException;
 import com.example.aopdemo.exceptions.NotAllowedException;
 import com.example.aopdemo.models.Vehicle;
 import com.example.aopdemo.repositories.VehicleRepository;
@@ -9,14 +8,15 @@ import com.example.aopdemo.services.VehicleService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class VehicleServiceImpl implements VehicleService {
@@ -78,7 +78,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Map<String, Object> deleteStudentById(String vehicleId) throws JsonProcessingException {
-        Map<String, Object> response = new HashMap();
+        Map<String, Object> response = new HashMap<>();
         Vehicle vehicle = vehicleRepository.getVehicleByServKeyValue("_id", vehicleId);
         if (vehicle == null) {
             throw new NotAllowedException("no vehicle present on this id " + vehicleId + "");
@@ -89,6 +89,25 @@ public class VehicleServiceImpl implements VehicleService {
         vehicleRepository.updateVehicle(vehicle);
         response.put("msg", "vehicle deleted successfully");
         return response;
+    }
+
+    @Override
+    public Map<String, Object> getFields(String key, String value, String fields) {
+        Map<String, Object> response = new HashMap<>();
+        List<String> projectionFields = new ArrayList();
+        if (fields != null && !fields.isBlank()) {
+            String[] includesFields = fields.split(",");
+            projectionFields.addAll(Arrays.asList(includesFields));
+        }
+        JSONObject vehicleInfo = vehicleRepository.getVehicleByProjection(key, value, projectionFields);
+        System.out.println(vehicleInfo);
+        if (vehicleInfo != null) {
+            response.put("data", vehicleInfo.toMap());
+            response.put("status", 200);
+            return response;
+        }
+        System.out.println(response);
+        return null;
     }
 }
 
