@@ -1,6 +1,5 @@
 package com.example.aopdemo.controllers;
 
-import com.example.aopdemo.models.Vehicle;
 import com.example.aopdemo.services.VehicleService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ public class VehicleController {
 
     @Autowired
     VehicleService studentService;
-
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createStudent(@RequestBody String vehicle) throws JsonProcessingException {
@@ -32,7 +30,7 @@ public class VehicleController {
     }
 
     @DeleteMapping(value = "/delete/{vehicleId}")
-    public ResponseEntity<?> deleteStudentById(@PathVariable("studentId") String studentId) {
-        return ResponseEntity.ok(studentService.deleteStudentById(studentId));
+    public ResponseEntity<?> deleteStudentById(@PathVariable("vehicleId") String vehicleId) throws JsonProcessingException {
+        return ResponseEntity.ok(studentService.deleteStudentById(vehicleId));
     }
 }

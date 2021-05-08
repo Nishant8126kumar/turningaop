@@ -1,5 +1,6 @@
 package com.example.aopdemo.services;
 
+import com.example.aopdemo.exceptions.DBException;
 import com.example.aopdemo.models.Vehicle;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -11,7 +12,7 @@ public interface VehicleService {
 
     Map<String, Object> updateStudent(String vehicle) throws JsonProcessingException;
 
-    Map<String, Object>     getStudentByID(String vehicleId);
+    Map<String, Object> getStudentByID(String vehicleId);
 
-    Map<String, Object> deleteStudentById(String vehicleId);
+    Map<String, Object> deleteStudentById(String vehicleId) throws JsonProcessingException;
 }

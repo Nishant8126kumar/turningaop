@@ -19,4 +19,14 @@ public class ExceptionMapper {
         response.put("status", HttpStatus.BAD_REQUEST);
         return ResponseEntity.ok(response);
     }
+
+    @ExceptionHandler(value = DBException.class)
+    public ResponseEntity<?> handleDbException(DBException dbException) {
+        System.out.println("Exception come here");
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", null);
+        response.put("message", dbException.getMessage());
+        response.put("status", HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(response);
+    }
 }

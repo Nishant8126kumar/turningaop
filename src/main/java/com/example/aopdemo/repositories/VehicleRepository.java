@@ -9,17 +9,14 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import springfox.documentation.spring.web.json.Json;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Filter;
 
 @Repository
 public class VehicleRepository {
@@ -37,30 +34,29 @@ public class VehicleRepository {
     }
 
     public Map<String, Object> createVehicle(Vehicle vehicle) {
-        Map<String, Object> respose = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         try {
             String jsonString = objectMapper.writeValueAsString(vehicle);//gson.toJson(vehicle);
             Document doc = Document.parse(jsonString);
-            doc.put("_id", UUID.randomUUID().toString());
-            doc.put("timeStamp", System.currentTimeMillis());
+            doc.put("_id", vehicle.getUuid());
             mongoCollection.insertOne(doc);
-            respose.put("msg", "vehicle created successfully");
-            respose.put("vehicleId", vehicle);
-            return respose;
+            response.put("msg", "vehicle created successfully");
+            response.put("vehicleId", vehicle);
+            return response;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public Map<String, Object> updateVehicle(Vehicle vehicle) throws JsonProcessingException {
+    public Map<String, Object> updateVehicle(Vehicle vehicle) {
         Map<String, Object> response = new HashMap<>();
         try {
             String jsonString = objectMapper.writeValueAsString(vehicle);
             Document doc = Document.parse(jsonString);
             doc.put("timeStamp", System.currentTimeMillis());
             BasicDBObject searchQuery = new BasicDBObject();
-            searchQuery.append("vehicleId", vehicle.getVehicleId());
+            searchQuery.append("_id", vehicle.getUuid());
             BasicDBObject updateQuery = new BasicDBObject();
             updateQuery.append("$set", doc);
             UpdateResult updateResult = mongoCollection.updateOne(searchQuery, updateQuery);
@@ -73,23 +69,43 @@ public class VehicleRepository {
         }
     }
 
-    public Vehicle VehicleByVehicleId(String vehicleId) {
+    public Vehicle vehicleByVehicleId(String vehicleId) {
         try {
             BasicDBObject basicDBObject = new BasicDBObject();
-            basicDBObject.append("vehicleId", vehicleId);
-            MongoCursor mongoCursor = mongoCollection.find(basicDBObject).iterator();
+            Vehicle vehicle;
+            basicDBObject.append("_id", vehicleId);
+            MongoCursor mongoCursor = mongoCollection.find(Filters.and(basicDBObject)).iterator();
             if (mongoCursor.hasNext()) {
-                Document doc = Document.parse(mongoCursor.next().toString());
+                Document doc = (Document) mongoCursor.next();
                 doc.remove("_id");
-//                Json json=J
-
-
+                String json = doc.toJson();
+                vehicle = objectMapper.readValue(json, Vehicle.class);
+                System.out.println(vehicle);
+                return vehicle;
+            } else {
+                throw new DBException("no record found on this vehicleId=:" + vehicleId);
             }
-
         } catch (Exception e) {
-
+            System.out.println(e.getLocalizedMessage());
         }
         return null;
-
     }
+
+    public Vehicle getVehicleByServKeyValue(String key, String value) throws JsonProcessingException {
+        MongoCursor cursor = mongoCollection.find(Filters.eq(key, value)).limit(1).iterator();
+        if (cursor.hasNext()) {
+            Document document = (Document) cursor.next();
+            document.remove("_id");
+            String jsonString = document.toJson();
+            Vehicle vehicle = objectMapper.readValue(jsonString, Vehicle.class);
+            return vehicle;
+        }
+        return null;
+    }
+//    ORDER BY CREATEDTIME DESC
+//    public static void main(String[] args) {
+//        String str="hl1code";
+//        String result = str.replaceAll("()([A-Z])", "$1_$2").toUpperCase();
+//        System.out.println(result);
+//    }
 }
