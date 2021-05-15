@@ -20,12 +20,21 @@ public class ExceptionMapper {
         return ResponseEntity.ok(response);
     }
 
-    @ExceptionHandler(value = DBException.class)
-    public ResponseEntity<?> handleDbException(DBException dbException) {
+    @ExceptionHandler(value = MongoDbException.class)
+    public ResponseEntity<?> handleDbException(MongoDbException dbException) {
         System.out.println("Exception come here");
         Map<String, Object> response = new HashMap<>();
         response.put("data", null);
         response.put("message", dbException.getMessage());
+        response.put("status", HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(response);
+    }
+
+    @ExceptionHandler(value = ResourceNotFoundException.class)
+    public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException resourceNotFoundException) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", null);
+        response.put("message", resourceNotFoundException.getMessage());
         response.put("status", HttpStatus.BAD_REQUEST);
         return ResponseEntity.ok(response);
     }

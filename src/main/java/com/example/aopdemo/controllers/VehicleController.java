@@ -1,7 +1,10 @@
 package com.example.aopdemo.controllers;
 
+import com.example.aopdemo.models.Vehicle;
 import com.example.aopdemo.services.VehicleService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,30 +15,45 @@ import org.springframework.web.bind.annotation.*;
 public class VehicleController {
 
     @Autowired
-    VehicleService studentService;
+    VehicleService vehicleService;
+    @Autowired
+    ObjectMapper objectMapper;
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createStudent(@RequestBody String vehicle) throws JsonProcessingException {
-        return ResponseEntity.ok(studentService.createStudent(vehicle));
+        return ResponseEntity.ok(vehicleService.createVehicle(vehicle));
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateStudent(@RequestBody String vehicle) throws JsonProcessingException {
-        return ResponseEntity.ok(studentService.updateStudent(vehicle));
+    public ResponseEntity<?> updateStudent(@RequestBody String request) throws Exception {
+        Vehicle vehicle = objectMapper.readValue(request, Vehicle.class);
+        return ResponseEntity.ok(vehicleService.updateVehicle(vehicle));
     }
 
     @GetMapping(value = "/getbyid/{vehicleId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getStudentByID(@PathVariable("vehicleId") String studentId) {
-        return ResponseEntity.ok(studentService.getStudentByID(studentId));
+    public ResponseEntity<?> getStudentByID(@PathVariable("vehicleId") String vehicleId) {
+        return ResponseEntity.ok(vehicleService.getVehicleByID(vehicleId));
     }
 
     @GetMapping(value = "/get/fields", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getFields(@RequestParam("key") String key, @RequestParam("value") String value, @RequestParam("fields") String fields) {
-        return ResponseEntity.ok(studentService.getFields(key, value, fields));
+        return ResponseEntity.ok(vehicleService.getFields(key, value, fields));
     }
 
     @DeleteMapping(value = "/delete/{vehicleId}")
     public ResponseEntity<?> deleteStudentById(@PathVariable("vehicleId") String vehicleId) throws JsonProcessingException {
-        return ResponseEntity.ok(studentService.deleteStudentById(vehicleId));
+        return ResponseEntity.ok(vehicleService.deleteVehicleById(vehicleId));
+    }
+
+    @GetMapping(value = "/get/vehicle", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getVehicle(@RequestBody String request) throws JsonProcessingException {
+        System.out.println(request);
+        JSONObject jsonObject = new JSONObject(request);
+        return ResponseEntity.ok(vehicleService.getVehicle(jsonObject));
+    }
+
+    @GetMapping(value = "/assign/device", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> assignVehicle(@RequestParam("vehicleId") String vehicleId, @RequestParam("vtsDeviceId") String vtsDeviceId, @RequestParam("flag") boolean flag) throws Exception {
+        return ResponseEntity.ok(vehicleService.assignVehicleOnDevice(vehicleId, vtsDeviceId, flag));
     }
 }

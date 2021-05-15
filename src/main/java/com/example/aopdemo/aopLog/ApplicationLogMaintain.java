@@ -1,6 +1,6 @@
 package com.example.aopdemo.aopLog;
 
-import com.example.aopdemo.AopdemoApplication;
+import com.example.aopdemo.VehicleApplication;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationLogMaintain {
 
-    final static Logger LOGGER = LoggerFactory.getLogger(AopdemoApplication.class);
+    final static Logger LOGGER = LoggerFactory.getLogger(VehicleApplication.class);
 
     @Pointcut(value = "execution(* com.example.aopdemo.controllers.VehicleController.*(..))")
     public void studentcontrollerPointcut() {

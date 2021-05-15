@@ -13,11 +13,13 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +60,6 @@ public class VehicleRepository {
         try {
             String jsonString = objectMapper.writeValueAsString(vehicle);
             Document doc = Document.parse(jsonString);
-            doc.put("timeStamp", System.currentTimeMillis());
             BasicDBObject searchQuery = new BasicDBObject();
             searchQuery.append("_id", vehicle.getUuid());
             BasicDBObject updateQuery = new BasicDBObject();
@@ -78,9 +79,9 @@ public class VehicleRepository {
             BasicDBObject basicDBObject = new BasicDBObject();
             Vehicle vehicle;
             basicDBObject.append("_id", vehicleId);
-            MongoCursor mongoCursor = mongoCollection.find(Filters.and(basicDBObject)).iterator();
+            MongoCursor<Document> mongoCursor = mongoCollection.find(Filters.and(basicDBObject)).iterator();
             if (mongoCursor.hasNext()) {
-                Document doc = (Document) mongoCursor.next();
+                Document doc = mongoCursor.next();
                 doc.remove("_id");
                 String json = doc.toJson();
                 vehicle = objectMapper.readValue(json, Vehicle.class);
@@ -96,9 +97,9 @@ public class VehicleRepository {
     }
 
     public Vehicle getVehicleByServKeyValue(String key, String value) throws JsonProcessingException {
-        MongoCursor cursor = mongoCollection.find(Filters.eq(key, value)).limit(1).iterator();
+        MongoCursor<Document> cursor = mongoCollection.find(Filters.eq(key, value)).limit(1).iterator();
         if (cursor.hasNext()) {
-            Document document = (Document) cursor.next();
+            Document document = cursor.next();
             document.remove("_id");
             String jsonString = document.toJson();
             Vehicle vehicle = objectMapper.readValue(jsonString, Vehicle.class);
@@ -109,22 +110,46 @@ public class VehicleRepository {
 
     public JSONObject getVehicleByProjection(String key, String value, List<String> projectionFiels) {
         try {
-            BasicDBObject requiredFiels = new BasicDBObject();
+            BasicDBObject requiredFields = new BasicDBObject();
             for (String projection : projectionFiels) {
-                requiredFiels.put(projection, 1);
+                requiredFields.put(projection, 1);
             }
-            MongoCursor cursor = mongoCollection.find(Filters.eq(key, value)).projection(requiredFiels).limit(1).iterator();
+            MongoCursor<Document> cursor = mongoCollection.find(Filters.eq(key, value)).projection(requiredFields).limit(1).iterator();
             if (cursor.hasNext()) {
-                Document doc = (Document) cursor.next();
-                System.out.println(doc);
+                Document doc = cursor.next();
                 doc.remove("_id");
                 doc.remove("timeStamp");
                 String jsonString = doc.toJson();
                 return new JSONObject(jsonString);
             }
         } catch (JSONException e) {
-            throw new MongoDbException("Exception occured while fetch data on " + key + ":" + value + "");
+            throw new MongoDbException("Exception occurred while fetch data on " + key + ":" + value + "");
         }
-        throw new ResourceNotFoundException("");
+        throw new ResourceNotFoundException("Resource not found");
+    }
+
+    public List<Vehicle> getVehicles(int offset, int limit, String sortBy, String sortIn, List<String> includeFields) throws JsonProcessingException {
+        List<Vehicle> vehicleList = new ArrayList<>();
+        BasicDBObject basicDBObject = new BasicDBObject();
+        BasicDBObject fields = new BasicDBObject();
+        for (String value : includeFields) {
+            basicDBObject.put(value, 1);
+        }
+        basicDBObject.put(sortBy, sortIn.equalsIgnoreCase("ASC") ? 1 : -1);
+        mongoCollection.createIndex(new BasicDBObject("vehicleRnNumber", 1));
+        try {
+            MongoCursor<Document> cursor = mongoCollection.find().sort(basicDBObject).skip(offset).limit(limit).iterator();
+            while (cursor.hasNext()) {
+                Document document = cursor.next();
+                document.remove("_id");
+                document.remove("timeStamp");
+                String jsonString = document.toJson();
+                Vehicle vehicle = objectMapper.readValue(jsonString, Vehicle.class);
+                vehicleList.add(vehicle);
+            }
+            return vehicleList;
+        } catch (Exception e) {
+            throw new MongoDbException("Some Exception occurred while fetch data from mongodb");
+        }
     }
 }

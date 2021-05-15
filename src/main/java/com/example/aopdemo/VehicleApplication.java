@@ -1,6 +1,5 @@
 package com.example.aopdemo;
 
-import com.example.aopdemo.repositories.VehicleRepository;
 import com.mongodb.client.MongoCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -13,12 +12,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableAspectJAutoProxy
 @EnableSwagger2
 @SpringBootApplication
-public class AopdemoApplication {
+public class VehicleApplication {
     @Autowired
     MongoTemplate mongoTemplate;
 
     public static void main(String[] args) {
-        SpringApplication.run(AopdemoApplication.class, args);
+        SpringApplication.run(VehicleApplication.class, args);
     }
 
 //    @Bean
