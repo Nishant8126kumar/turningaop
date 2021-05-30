@@ -3,7 +3,7 @@ package com.example.aopdemo.services.impl;
 import com.example.aopdemo.ApplicationConstant;
 import com.example.aopdemo.exceptions.NotAllowedException;
 import com.example.aopdemo.exceptions.ResourceNotFoundException;
-import com.example.common.models.Vehicle;
+import com.common.models.Vehicle;
 import com.example.aopdemo.repositories.VehicleRepository;
 import com.example.aopdemo.services.VehicleService;
 import com.example.aopdemo.services.utils.BeanUtils;

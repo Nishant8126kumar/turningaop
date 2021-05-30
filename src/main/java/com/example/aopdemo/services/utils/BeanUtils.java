@@ -1,6 +1,6 @@
 package com.example.aopdemo.services.utils;
 
-import com.example.common.models.Vehicle;
+import com.common.models.Vehicle;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;

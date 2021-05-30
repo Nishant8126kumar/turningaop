@@ -3,7 +3,7 @@ package com.example.aopdemo.repositories;
 import com.example.aopdemo.exceptions.DBException;
 import com.example.aopdemo.exceptions.MongoDbException;
 import com.example.aopdemo.exceptions.ResourceNotFoundException;
-import com.example.common.models.Vehicle;
+import com.common.models.Vehicle;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;

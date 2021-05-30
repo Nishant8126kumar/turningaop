@@ -1,7 +1,7 @@
 package com.example.aopdemo.services;
 
 
-import com.example.common.models.Vehicle;
+import com.common.models.Vehicle;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.JSONObject;
 
