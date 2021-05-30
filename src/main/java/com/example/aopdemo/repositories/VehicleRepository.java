@@ -3,7 +3,7 @@ package com.example.aopdemo.repositories;
 import com.example.aopdemo.exceptions.DBException;
 import com.example.aopdemo.exceptions.MongoDbException;
 import com.example.aopdemo.exceptions.ResourceNotFoundException;
-import com.example.aopdemo.models.Vehicle;
+import com.example.common.models.Vehicle;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -13,7 +13,6 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,7 @@ public class VehicleRepository {
 
     @Autowired
     private Gson gson;
+
     @Autowired
     ObjectMapper objectMapper;
 

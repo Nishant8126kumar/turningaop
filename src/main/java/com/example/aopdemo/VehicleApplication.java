@@ -20,11 +20,6 @@ public class VehicleApplication {
         SpringApplication.run(VehicleApplication.class, args);
     }
 
-//    @Bean
-//    public VehicleRepository provideVehicleRepo() {
-//        return new VehicleRepository();
-//    }
-
     @Bean
     public MongoCollection provideMongoColletiion() {
         MongoCollection mongoCollection = mongoTemplate.getCollection("VehicleData");

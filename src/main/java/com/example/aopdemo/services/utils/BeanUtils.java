@@ -1,6 +1,6 @@
 package com.example.aopdemo.services.utils;
 
-import com.example.aopdemo.models.Vehicle;
+import com.example.common.models.Vehicle;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -34,8 +34,8 @@ public class BeanUtils {
 
     public static void main(String[] args) {
 
-        Vehicle d = new Vehicle(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
-        Vehicle d1 = new Vehicle("656757",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+        Vehicle d = new Vehicle(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+        Vehicle d1 = new Vehicle("656757",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
         try {
             copy(d, d1);
             System.out.print(d);

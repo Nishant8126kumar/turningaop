@@ -1,6 +1,6 @@
 package com.example.aopdemo.controllers;
 
-import com.example.aopdemo.models.Vehicle;
+import com.example.common.models.Vehicle;
 import com.example.aopdemo.services.VehicleService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
