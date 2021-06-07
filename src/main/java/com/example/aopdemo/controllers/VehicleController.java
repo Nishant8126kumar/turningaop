@@ -56,4 +56,13 @@ public class VehicleController {
     public ResponseEntity<?> assignVehicle(@RequestParam("vehicleId") String vehicleId, @RequestParam("vtsDeviceId") String vtsDeviceId, @RequestParam("flag") boolean flag) throws Exception {
         return ResponseEntity.ok(vehicleService.assignVehicleOnDevice(vehicleId, vtsDeviceId, flag));
     }
+
+    @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getVehicleData() throws Exception {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setCreationTime(System.currentTimeMillis());
+        vehicle.setVehicleRnNumber("UP81BD8026");
+        return ResponseEntity.ok(vehicle);
+    }
+
 }
