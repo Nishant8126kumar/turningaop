@@ -52,7 +52,7 @@ public class VehicleController {
         return ResponseEntity.ok(vehicleService.getVehicle(jsonObject));
     }
 
-    @GetMapping(value = "/assign/device", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/assign/device", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> assignVehicle(@RequestParam("vehicleId") String vehicleId, @RequestParam("vtsDeviceId") String vtsDeviceId, @RequestParam("flag") boolean flag) throws Exception {
         return ResponseEntity.ok(vehicleService.assignVehicleOnDevice(vehicleId, vtsDeviceId, flag));
     }

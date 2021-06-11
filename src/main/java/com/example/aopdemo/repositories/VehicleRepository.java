@@ -1,15 +1,16 @@
 package com.example.aopdemo.repositories;
 
+import com.common.models.Vehicle;
 import com.example.aopdemo.exceptions.DBException;
 import com.example.aopdemo.exceptions.MongoDbException;
 import com.example.aopdemo.exceptions.ResourceNotFoundException;
-import com.common.models.Vehicle;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
@@ -26,8 +27,8 @@ import java.util.Map;
 @Repository
 public class VehicleRepository {
 
-    @Autowired
-    private MongoCollection<Document> mongoCollection;
+    @Autowired(required = false)
+    MongoCollection<Document> mongoCollection;
 
     @Autowired
     private Gson gson;
@@ -35,8 +36,8 @@ public class VehicleRepository {
     @Autowired
     ObjectMapper objectMapper;
 
-    public VehicleRepository() {
-
+    public VehicleRepository(MongoDatabase mongoDatabase) {
+        mongoCollection=mongoDatabase.getCollection("vehicle");
     }
 
     public Map<String, Object> createVehicle(Vehicle vehicle) {
@@ -101,6 +102,8 @@ public class VehicleRepository {
         if (cursor.hasNext()) {
             Document document = cursor.next();
             document.remove("_id");
+            document.remove("creationTime");
+            document.remove("updateTime");
             String jsonString = document.toJson();
             Vehicle vehicle = objectMapper.readValue(jsonString, Vehicle.class);
             return vehicle;
