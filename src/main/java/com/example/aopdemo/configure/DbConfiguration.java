@@ -16,7 +16,7 @@ public class DbConfiguration {
     }
 
     @Bean
-    public MongoDatabase proviveMongoDataBase(MongoClient mongoClient) {
+    public MongoDatabase provideMongoDataBase(MongoClient mongoClient) {
         return mongoClient.getDatabase("Fretron");
     }
 

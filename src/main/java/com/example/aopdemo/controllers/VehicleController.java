@@ -1,6 +1,7 @@
 package com.example.aopdemo.controllers;
 
 import com.common.models.Vehicle;
+import com.common.utils.ApplicationResponse;
 import com.example.aopdemo.services.VehicleService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/vehicle")
+@RequestMapping(value = "/vehicle/v1")
 public class VehicleController {
 
     @Autowired
@@ -54,7 +55,8 @@ public class VehicleController {
 
     @PutMapping(value = "/assign/device", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> assignVehicle(@RequestParam("vehicleId") String vehicleId, @RequestParam("vtsDeviceId") String vtsDeviceId, @RequestParam("flag") boolean flag) throws Exception {
-        return ResponseEntity.ok(vehicleService.assignVehicleOnDevice(vehicleId, vtsDeviceId, flag));
+        ApplicationResponse applicationResponse=ApplicationResponse.makeResponse(vehicleService.assignVehicleOnDevice(vehicleId, vtsDeviceId, flag));
+        return ResponseEntity.ok(applicationResponse);
     }
 
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)

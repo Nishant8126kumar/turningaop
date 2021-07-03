@@ -55,7 +55,6 @@ public class VehicleServiceImpl implements VehicleService {
                 HttpEntity<String> entity = new HttpEntity<>(headers);
                 ResponseEntity<String> response = restTemplate.exchange("http://DEVICE-MANAGER/device/v1/assign/device?vehicleRnNo="+vehicle.getVehicleRnNumber()+"&vtsDeviceId=" + vehicle.getVtsDeviceId() + "", HttpMethod.PUT, entity, String.class);
                 System.out.println(response);
-
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 throw new NotAllowedException("Exception Occurred While call Device gateway");
@@ -173,7 +172,6 @@ public class VehicleServiceImpl implements VehicleService {
     public Map<String, Object> assignVehicleOnDevice(String vehicleRnNo, String vtsDeviceId, boolean flag) throws Exception {
         Optional<Vehicle> optionalVehicle = Optional.ofNullable(vehicleRepository.getVehicleByServKeyValue("vehicleRnNumber",vehicleRnNo));
         if (optionalVehicle.isPresent()) {
-            System.out.println("here2");
             optionalVehicle.get();
             Vehicle vehicle = optionalVehicle.get();
             if (vehicle.getVtsDeviceId() != null) {

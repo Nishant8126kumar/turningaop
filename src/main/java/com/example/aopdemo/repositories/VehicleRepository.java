@@ -37,7 +37,7 @@ public class VehicleRepository {
     ObjectMapper objectMapper;
 
     public VehicleRepository(MongoDatabase mongoDatabase) {
-        mongoCollection=mongoDatabase.getCollection("vehicle");
+        mongoCollection = mongoDatabase.getCollection("vehicle");
     }
 
     public Map<String, Object> createVehicle(Vehicle vehicle) {
@@ -68,6 +68,7 @@ public class VehicleRepository {
             UpdateResult updateResult = mongoCollection.updateOne(searchQuery, updateQuery);
             response.put("massage", "Vehicle updated successfully");
             response.put("data", updateResult);
+            response.put("status", 200);
             return response;
         } catch (Exception e) {
             e.printStackTrace();
