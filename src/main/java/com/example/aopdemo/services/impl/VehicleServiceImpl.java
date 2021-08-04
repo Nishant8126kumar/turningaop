@@ -1,13 +1,13 @@
 package com.example.aopdemo.services.impl;
 
-import com.common.models.Device;
+import com.common.models.Vehicle;
+import com.common.utils.BeanUtils;
 import com.example.aopdemo.ApplicationConstant;
 import com.example.aopdemo.exceptions.NotAllowedException;
 import com.example.aopdemo.exceptions.ResourceNotFoundException;
-import com.common.models.Vehicle;
 import com.example.aopdemo.repositories.VehicleRepository;
 import com.example.aopdemo.services.VehicleService;
-import com.example.aopdemo.services.utils.BeanUtils;
+import com.example.aopdemo.services.gateways.DeviceManager;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -33,6 +33,9 @@ public class VehicleServiceImpl implements VehicleService {
     ObjectMapper objectMapper;
 
     @Autowired
+    DeviceManager deviceManager;
+
+    @Autowired
     RestTemplate restTemplate;
 
 
@@ -47,19 +50,8 @@ public class VehicleServiceImpl implements VehicleService {
         }
         if (vehicle.getSource() == null) vehicle.setSource("TurningCloud");
         if (vehicle.getVtsDeviceId() != null) {
-            try {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-                headers.set("X-COM-PERSIST", "NO");
-                headers.set("X-COM-LOCATION", "USA");
-                HttpEntity<String> entity = new HttpEntity<>(headers);
-                ResponseEntity<String> response = restTemplate.exchange("http://DEVICE-MANAGER/device/v1/assign/device?vehicleRnNo="+vehicle.getVehicleRnNumber()+"&vtsDeviceId=" + vehicle.getVtsDeviceId() + "", HttpMethod.PUT, entity, String.class);
-                System.out.println(response);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                throw new NotAllowedException("Exception Occurred While call Device gateway");
-            }
-
+            if (!deviceManager.assignDeviceOnVehicle(vehicle))throw new ResourceNotFoundException("Error Occurred while" +
+                    " assign device On Vehicle");
         }
         vehicle.setStatus(ApplicationConstant.VEHICLE_CREATED);
         vehicle.setCreationTime(System.currentTimeMillis());

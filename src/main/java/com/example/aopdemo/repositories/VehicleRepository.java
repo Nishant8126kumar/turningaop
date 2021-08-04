@@ -27,7 +27,7 @@ import java.util.Map;
 @Repository
 public class VehicleRepository {
 
-    @Autowired(required = false)
+//    @Autowired(required = false)
     MongoCollection<Document> mongoCollection;
 
     @Autowired
