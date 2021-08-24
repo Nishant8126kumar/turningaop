@@ -1,19 +1,19 @@
 package com.example.aopdemo.services.impl;
 
+
 import com.common.models.Vehicle;
-import com.common.utils.BeanUtils;
-import com.example.aopdemo.ApplicationConstant;
 import com.example.aopdemo.exceptions.NotAllowedException;
 import com.example.aopdemo.exceptions.ResourceNotFoundException;
 import com.example.aopdemo.repositories.VehicleRepository;
 import com.example.aopdemo.services.VehicleService;
 import com.example.aopdemo.services.gateways.DeviceManager;
+import com.example.aopdemo.utils.BeanUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,7 +42,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public Map<String, Object> createVehicle(String vehicleObj) throws JsonProcessingException {
         Vehicle vehicle = objectMapper.readValue(vehicleObj, Vehicle.class);
-        if (vehicle.getVehicleRnNumber() == null || vehicle.getChassisNo() == null) {
+        if (vehicle.getVehicleRegistrationNumber() == null || vehicle.getChassisNumber()== null) {
             throw new NotAllowedException("Mandatory fields should not be empty");
         }
         if (vehicleRepository.getVehicleByServKeyValue("_id", vehicle.getUuid()) != null) {
@@ -53,8 +53,7 @@ public class VehicleServiceImpl implements VehicleService {
             if (!deviceManager.assignDeviceOnVehicle(vehicle))throw new ResourceNotFoundException("Error Occurred while" +
                     " assign device On Vehicle");
         }
-        vehicle.setStatus(ApplicationConstant.VEHICLE_CREATED);
-        vehicle.setCreationTime(System.currentTimeMillis());
+        vehicle.setCreateTime(System.currentTimeMillis());
         vehicle.setUpdateTime(System.currentTimeMillis());
         vehicle.setUuid(UUID.randomUUID().toString());
         return vehicleRepository.createVehicle(vehicle);
@@ -62,7 +61,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Map<String, Object> updateVehicle(Vehicle forUpdate) throws Exception {
-        if (forUpdate.getVehicleRnNumber() == null || forUpdate.getUuid() == null) {
+        if (forUpdate.getVehicleRegistrationNumber() == null || forUpdate.getUuid() == null) {
             throw new NotAllowedException("mandatory field should not be empty");
         }
         Optional<Vehicle> optionalVehicle = Optional.ofNullable(vehicleRepository.getVehicleByServKeyValue("_id", forUpdate.getUuid()));
@@ -97,7 +96,6 @@ public class VehicleServiceImpl implements VehicleService {
             throw new NotAllowedException("no vehicle present on this id " + vehicleId + "");
 
         }
-        vehicle.setStatus(ApplicationConstant.VEHICLE_DELETED);
         vehicle.setUpdateTime(System.currentTimeMillis());
         vehicleRepository.updateVehicle(vehicle);
         response.put("msg", "vehicle deleted successfully");
@@ -169,7 +167,7 @@ public class VehicleServiceImpl implements VehicleService {
             if (vehicle.getVtsDeviceId() != null) {
                 if (flag) {
                     vehicle.setVtsDeviceId(vtsDeviceId);
-                    vehicle.setTrackingEnabled(true);
+                    vehicle.setIsTrackingEnabled(true);
                     System.out.println("Request For Update");
                     return updateVehicle(vehicle);
                 } else

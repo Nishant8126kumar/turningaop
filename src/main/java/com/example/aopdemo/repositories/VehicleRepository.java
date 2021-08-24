@@ -43,15 +43,15 @@ public class VehicleRepository {
     public Map<String, Object> createVehicle(Vehicle vehicle) {
         Map<String, Object> response = new HashMap<>();
         try {
-            String jsonString = objectMapper.writeValueAsString(vehicle);//gson.toJson(vehicle);
-            Document doc = Document.parse(jsonString);
+//            String jsonString = objectMapper.writeValueAsString(vehicle);//gson.toJson(vehicle);
+            Document doc = Document.parse(vehicle.toString());
             doc.put("_id", vehicle.getUuid());
             mongoCollection.insertOne(doc);
             response.put("msg", "vehicle created successfully");
             response.put("vehicleId", vehicle);
             return response;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.printf("Exception Occurred :"+e.getMessage());
         }
         return null;
     }
