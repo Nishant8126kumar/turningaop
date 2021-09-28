@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Repository
 public class VehicleRepository {
@@ -40,18 +41,18 @@ public class VehicleRepository {
         mongoCollection = mongoDatabase.getCollection("vehicle");
     }
 
-    public Map<String, Object> createVehicle(Vehicle vehicle) {
+    public Vehicle createVehicle(Vehicle vehicle) {
         Map<String, Object> response = new HashMap<>();
         try {
-//            String jsonString = objectMapper.writeValueAsString(vehicle);//gson.toJson(vehicle);
+//            String jsonString = gson.toJson(vehicle);
             Document doc = Document.parse(vehicle.toString());
             doc.put("_id", vehicle.getUuid());
             mongoCollection.insertOne(doc);
             response.put("msg", "vehicle created successfully");
-            response.put("vehicleId", vehicle);
-            return response;
+            response.put("vehicleId", "vehicle");
+            return vehicle;
         } catch (Exception e) {
-            System.out.printf("Exception Occurred :"+e.getMessage());
+            System.out.print("Exception Occurred :"+e.getMessage());
         }
         return null;
     }

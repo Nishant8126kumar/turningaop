@@ -40,7 +40,8 @@ public class VehicleServiceImpl implements VehicleService {
 
 
     @Override
-    public Map<String, Object> createVehicle(String vehicleObj) throws JsonProcessingException {
+    public Vehicle createVehicle(String vehicleObj) throws JsonProcessingException {
+        Map<String,Object> response=new HashMap<>();
         Vehicle vehicle = objectMapper.readValue(vehicleObj, Vehicle.class);
         if (vehicle.getVehicleRegistrationNumber() == null || vehicle.getChassisNumber()== null) {
             throw new NotAllowedException("Mandatory fields should not be empty");

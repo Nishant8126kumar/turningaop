@@ -22,7 +22,7 @@ public class VehicleController {
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createStudent(@RequestBody String vehicle) throws JsonProcessingException {
-        return ResponseEntity.ok(vehicleService.createVehicle(vehicle));
+        return ResponseEntity.ok(AppResponse.makeResponse(vehicleService.createVehicle(vehicle)));
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

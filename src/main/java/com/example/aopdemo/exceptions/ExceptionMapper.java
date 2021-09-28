@@ -10,16 +10,16 @@ public class ExceptionMapper {
 
     @ExceptionHandler(value = NotAllowedException.class)
     public ResponseEntity<?> handleNotAllowedException(NotAllowedException notAllowedException) {
-        return ResponseEntity.ok(new AppResponse( null,500, notAllowedException.getMessage()));
+        return ResponseEntity.ok(AppResponse.makeErrorResponse(notAllowedException.getMessage()));
     }
 
     @ExceptionHandler(value = MongoDbException.class)
     public ResponseEntity<?> handleDbException(MongoDbException mongoDbException) {
-        return ResponseEntity.ok(new AppResponse( null,500, mongoDbException.getMessage()));
+        return ResponseEntity.ok(AppResponse.makeErrorResponse(mongoDbException.getMessage()));
     }
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
     public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException resourceNotFoundException) {
-        return ResponseEntity.ok(new AppResponse( null,500, resourceNotFoundException.getMessage()));
+        return ResponseEntity.ok(AppResponse.makeResponse(resourceNotFoundException.getMessage()));
     }
 }

@@ -1,7 +1,8 @@
 package com.example.aopdemo.configure;
 
 import com.example.aopdemo.repositories.VehicleRepository;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +12,9 @@ public class DbConfiguration {
 
 
     @Bean
-    public MongoClient provideMongoClient() {
-        return new MongoClient("localhost", 27017);
+    public com.mongodb.client.MongoClient provideMongoClient() {
+        return MongoClients.create("mongodb+srv://Nishant:6TIgVOhb326FkIMO@cluster0.wjfgs.mongodb.net/test");
+//        return new MongoClient("localhost", 27017);
     }
 
     @Bean
