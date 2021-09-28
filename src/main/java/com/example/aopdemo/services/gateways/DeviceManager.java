@@ -19,7 +19,7 @@ public class DeviceManager {
 
     public boolean assignDeviceOnVehicle(Vehicle vehicle) {
         boolean result = false;
-        String url = "http://DEVICE-MANAGER/device/v1/assign/device?vehicleRnNo=" + vehicle.getVehicleRnNumber() + "&vtsDeviceId=" + vehicle.getVtsDeviceId();
+        String url = "http://DEVICE-MANAGER/device/v1/assign/device?vehicleRnNo=" + vehicle.getVehicleRegistrationNumber() + "&vtsDeviceId=" + vehicle.getVtsDeviceId();
         ResponseEntity<String> response = this.makePutRequestGetResponse(url, "");
         JSONObject jsonObject = new JSONObject(response.getBody());
         if (jsonObject.getInt("status") == 200) result = true;

@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface VehicleService {
 
-    Map<String, Object> createVehicle(String vehicle) throws JsonProcessingException;
+    Vehicle createVehicle(String vehicle) throws JsonProcessingException;
 
     Map<String, Object> updateVehicle(Vehicle vehicle) throws Exception;
 

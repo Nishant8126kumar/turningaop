@@ -1,8 +1,8 @@
 package com.example.aopdemo.controllers;
 
 import com.common.models.Vehicle;
-import com.common.utils.ApplicationResponse;
 import com.example.aopdemo.services.VehicleService;
+import com.example.aopdemo.utils.AppResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
@@ -22,7 +22,7 @@ public class VehicleController {
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createStudent(@RequestBody String vehicle) throws JsonProcessingException {
-        return ResponseEntity.ok(vehicleService.createVehicle(vehicle));
+        return ResponseEntity.ok(AppResponse.makeResponse(vehicleService.createVehicle(vehicle)));
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,15 +55,15 @@ public class VehicleController {
 
     @PutMapping(value = "/assign/device", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> assignVehicle(@RequestParam("vehicleId") String vehicleId, @RequestParam("vtsDeviceId") String vtsDeviceId, @RequestParam("flag") boolean flag) throws Exception {
-        ApplicationResponse applicationResponse=ApplicationResponse.makeResponse(vehicleService.assignVehicleOnDevice(vehicleId, vtsDeviceId, flag));
+        AppResponse applicationResponse= AppResponse.makeResponse(vehicleService.assignVehicleOnDevice(vehicleId, vtsDeviceId, flag));
         return ResponseEntity.ok(applicationResponse);
     }
 
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getVehicleData() throws Exception {
         Vehicle vehicle = new Vehicle();
-        vehicle.setCreationTime(System.currentTimeMillis());
-        vehicle.setVehicleRnNumber("UP81BD8026");
+        vehicle.setCreateTime(System.currentTimeMillis());
+        vehicle.setVehicleRegistrationNumber("UP81BD8026");
         return ResponseEntity.ok(vehicle);
     }
 
