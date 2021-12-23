@@ -32,8 +32,8 @@ public class VehicleController {
     }
 
     @GetMapping(value = "/getbyid/{vehicleId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getStudentByID(@PathVariable("vehicleId") String vehicleId) {
-        return ResponseEntity.ok(vehicleService.getVehicleByID(vehicleId));
+    public String getStudentByID(@PathVariable("vehicleId") String vehicleId) {
+        return new AppResponse(vehicleService.getVehicleByID(vehicleId), 200, "").toString();
     }
 
     @GetMapping(value = "/get/fields", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,7 +55,7 @@ public class VehicleController {
 
     @PutMapping(value = "/assign/device", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> assignVehicle(@RequestParam("vehicleId") String vehicleId, @RequestParam("vtsDeviceId") String vtsDeviceId, @RequestParam("flag") boolean flag) throws Exception {
-        AppResponse applicationResponse= AppResponse.makeResponse(vehicleService.assignVehicleOnDevice(vehicleId, vtsDeviceId, flag));
+        AppResponse applicationResponse = AppResponse.makeResponse(vehicleService.assignVehicleOnDevice(vehicleId, vtsDeviceId, flag));
         return ResponseEntity.ok(applicationResponse);
     }
 

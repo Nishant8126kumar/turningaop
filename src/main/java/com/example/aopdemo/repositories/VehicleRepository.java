@@ -86,8 +86,10 @@ public class VehicleRepository {
             if (mongoCursor.hasNext()) {
                 Document doc = mongoCursor.next();
                 doc.remove("_id");
-                String json = doc.toJson();
+                String json = objectMapper.writeValueAsString(doc);
+                System.out.println("Here :"+json);
                 vehicle = objectMapper.readValue(json, Vehicle.class);
+                System.out.println("Now :"+vehicle);
                 System.out.println(vehicle);
                 return vehicle;
             } else {

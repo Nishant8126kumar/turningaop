@@ -41,9 +41,9 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle createVehicle(String vehicleObj) throws JsonProcessingException {
-        Map<String,Object> response=new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         Vehicle vehicle = objectMapper.readValue(vehicleObj, Vehicle.class);
-        if (vehicle.getVehicleRegistrationNumber() == null || vehicle.getChassisNumber()== null) {
+        if (vehicle.getVehicleRegistrationNumber() == null || vehicle.getChassisNumber() == null) {
             throw new NotAllowedException("Mandatory fields should not be empty");
         }
         if (vehicleRepository.getVehicleByServKeyValue("_id", vehicle.getUuid()) != null) {
@@ -51,8 +51,9 @@ public class VehicleServiceImpl implements VehicleService {
         }
         if (vehicle.getSource() == null) vehicle.setSource("TurningCloud");
         if (vehicle.getVtsDeviceId() != null) {
-            if (!deviceManager.assignDeviceOnVehicle(vehicle))throw new ResourceNotFoundException("Error Occurred while" +
-                    " assign device On Vehicle");
+            if (!deviceManager.assignDeviceOnVehicle(vehicle))
+                throw new ResourceNotFoundException("Error Occurred while" +
+                        " assign device On Vehicle");
         }
         vehicle.setCreateTime(System.currentTimeMillis());
         vehicle.setUpdateTime(System.currentTimeMillis());
@@ -76,15 +77,13 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public Map<String, Object> getVehicleByID(String vehicleId) {
+    public Vehicle getVehicleByID(String vehicleId) {
         Map<String, Object> response = new HashMap<>();
-        Optional<Vehicle> optionalVehicle = Optional.ofNullable(vehicleRepository.vehicleByVehicleId(vehicleId));
-        if (optionalVehicle.isPresent() && !optionalVehicle.get().getStatus().equalsIgnoreCase("DELETED")) {
-            Vehicle vehicle = optionalVehicle.get();
-            response.put("data", vehicle);
-            response.put("massage", "Vehicle Found Successfully");
-            response.put("status", HttpStatus.OK);
-            return response;
+        Vehicle vehicle = Optional.ofNullable(vehicleRepository.vehicleByVehicleId(vehicleId)).orElseThrow(() ->
+                new ResourceNotFoundException("Vehicle not found on this vehicle Id=:" + vehicleId)
+        );
+        if (vehicle.getStatus() != null && !vehicle.getStatus().equalsIgnoreCase("DELETED")) {
+            return vehicle;
         }
         throw new ResourceNotFoundException("Vehicle not found on this vehicle Id=:" + vehicleId);
     }
@@ -161,7 +160,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Map<String, Object> assignVehicleOnDevice(String vehicleRnNo, String vtsDeviceId, boolean flag) throws Exception {
-        Optional<Vehicle> optionalVehicle = Optional.ofNullable(vehicleRepository.getVehicleByServKeyValue("vehicleRnNumber",vehicleRnNo));
+        Optional<Vehicle> optionalVehicle = Optional.ofNullable(vehicleRepository.getVehicleByServKeyValue("vehicleRnNumber", vehicleRnNo));
         if (optionalVehicle.isPresent()) {
             optionalVehicle.get();
             Vehicle vehicle = optionalVehicle.get();

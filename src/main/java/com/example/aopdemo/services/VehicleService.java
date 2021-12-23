@@ -13,7 +13,7 @@ public interface VehicleService {
 
     Map<String, Object> updateVehicle(Vehicle vehicle) throws Exception;
 
-    Map<String, Object> getVehicleByID(String vehicleId);
+   Vehicle getVehicleByID(String vehicleId);
 
     Map<String, Object> deleteVehicleById(String vehicleId) throws JsonProcessingException;
 

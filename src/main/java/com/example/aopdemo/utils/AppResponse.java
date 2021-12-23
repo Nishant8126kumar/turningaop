@@ -6,6 +6,16 @@ import org.json.JSONObject;
 public class AppResponse<T> {
     T data;
     int status;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "data:" + data +
+                ",status:" + status +
+                ",error:" + error +
+                "}";
+    }
+
     String error;
 
     public AppResponse() {
@@ -45,24 +55,9 @@ public class AppResponse<T> {
         return new AppResponse(data, 200, null);
     }
 
-    private static <T> JSONObject covertIntoJSONObject(T json) {
-        try {
-            return new JSONObject(json.toString());
-        } catch (JSONException e) {
-            return null;
-        }
-    }
-
     public static <T> AppResponse<T> makeErrorResponse(String message) {
         return new AppResponse<>(null, 200, message);
     }
 
-    @Override
-    public String toString() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("data", "data");
-        jsonObject.put("error", JSONObject.NULL);
-        jsonObject.put("status", 200);
-        return jsonObject.toString();
-    }
+
 }
